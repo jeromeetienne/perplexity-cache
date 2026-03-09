@@ -12,13 +12,14 @@
 	},
 	"keywords": [],
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"type": "commonjs",
 	"devDependencies": {
 		"@keyv/sqlite": "^4.0.8",
 		"@types/node": "^25.4.0",
 		"cacheable": "^2.3.3",
-		"tsx": "^4.21.0"
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
 		"@perplexity-ai/perplexity_ai": "^0.26.1"

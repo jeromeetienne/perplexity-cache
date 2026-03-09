@@ -1,4 +1,4 @@
-# `perplexity_cache`
+# `perplexity-cache`
 
 A tiny TypeScript wrapper around the official Perplexity SDK that adds transparent caching for:
 
@@ -40,10 +40,9 @@ This keeps search and responses keyspaces independent.
 
 ## Installation
 
-From this folder:
+From this repository root:
 
 ```bash
-cd contribs/perplexity_cache
 npm install @perplexity-ai/perplexity_ai cacheable @keyv/sqlite
 ```
 
@@ -62,22 +61,27 @@ import { Cacheable, KeyvStoreAdapter } from "cacheable";
 import { Perplexity } from "@perplexity-ai/perplexity_ai";
 import { PerplexityCached } from "./src/perplexity_cached";
 
+// Create the base Perplexity client with your API key
 const baseClient = new Perplexity({
 	apiKey: process.env.PERPLEXITY_API_KEY!,
 });
 
-const sqlitePath = Path.resolve(__dirname, "../../output/.perplexity_cache.sqlite");
+// Create a Cacheable instance with a SQLite store - you can use any Keyv-compatible store or even an in-memory one for testing
+const sqlitePath = Path.resolve(__dirname, ".perplexity_cache.sqlite");
 const store = new KeyvSqlite(`sqlite://${sqlitePath}`);
 const cacheable = new Cacheable({ secondary: store as KeyvStoreAdapter });
 
-const client = new PerplexityCached(baseClient, cacheable);
+// Create a PerplexityCached instance that wraps the base client and cacheable
+const perplexityCached = new PerplexityCached(baseClient, cacheable);
 
-const response = await client.responses.create({
+// Now you can use perplexityCached just like the original client, but with caching
+const response = await perplexityCached.responses.create({
 	model: "perplexity/sonar",
 	input: "Summarize this page: https://example.com",
 	tools: [{ type: "fetch_url" }],
 });
 
+// display the result
 console.log(response.output_text);
 ```
 
@@ -99,12 +103,14 @@ The wrapper exposes:
 
 - `client.search.create(args)`
 - `client.responses.create(args)`
+- `client.setCacheEnabled(boolean)`
+- `await client.cleanCache()`
 
 Both methods keep the input/output typing from the official SDK.
 
 ## Running Included Examples
 
-From `contribs/perplexity_cache`:
+From repository root:
 
 ```bash
 # search.create with visible cache-hit timing
@@ -115,18 +121,8 @@ npx tsx ./examples/response_create.ts
 
 # pro-search preset response example
 npx tsx ./examples/pro_search.ts
-
-# pro-search + extracted references from response.output
-npx tsx ./examples/pro_search_playground.ts
 ```
 
-## Typical Cache Location
-
-Examples write to:
-
-`output/.perplexity_cache.sqlite`
-
-You can change this path to isolate caches per project, environment, or experiment.
 
 ## Notes
 
@@ -137,11 +133,10 @@ You can change this path to isolate caches per project, environment, or experime
 ## File Layout
 
 ```text
-contribs/perplexity_cache/
-	src/perplexity_cached.ts
-	examples/
-		search_create.ts
-		response_create.ts
-		pro_search.ts
-		pro_search_playground.ts
+perplexity-cache/
+  src/perplexity_cached.ts
+  examples/
+    search_create.ts
+    response_create.ts
+    pro_search.ts
 ```
