@@ -1,0 +1,13 @@
+
+
+# Dependencies
+node_modules/
+
+# ignore .env file
+.env
+
+# ignore MacOS system files
+.DS_Store
+
+# ignore SQLite database file
+.perplexity_cache.sqlite

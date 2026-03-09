@@ -1,0 +1,26 @@
+{
+	"name": "perplexity-cache",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/perplexity_cached.ts",
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"clean": "rm -rf dist",
+		"prepublishOnly": "npm run test && npm run build",
+		"publish:all": "npm run build && npm version patch && npm publish --access public",
+		"test": "tsx --test test/**/*.test.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"devDependencies": {
+		"@keyv/sqlite": "^4.0.8",
+		"@types/node": "^25.4.0",
+		"cacheable": "^2.3.3",
+		"tsx": "^4.21.0"
+	},
+	"dependencies": {
+		"@perplexity-ai/perplexity_ai": "^0.26.1"
+	}
+}
